@@ -5,6 +5,7 @@ import TopPage from './components/templates/TopPage';
 
 const App: FC = () => (
   <TopPage />
+
 )
 
 export default App;

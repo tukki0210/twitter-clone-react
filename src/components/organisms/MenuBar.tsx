@@ -7,10 +7,6 @@ import BookMarkButton from '../molecules/BookMarkButton'
 import ListButton from '../molecules/ListButton'
 import ProfileButton from '../molecules/ProfileButton'
 
-
-
-
-
 const MenuBar: FC = () => (
     <>
         <HomeButton />

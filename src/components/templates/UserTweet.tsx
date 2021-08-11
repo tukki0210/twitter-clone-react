@@ -1,8 +1,8 @@
 import { FC } from 'react';
 
-import TweetUserName from '../molecules/TweetUser'
-import TweetBody from '../molecules/TweetBody'
-import TweetFooter from '../molecules/TweetFooter'
+import TweetUserName from '../organisms/TweetUser'
+import TweetBody from '../organisms/TweetBody'
+import TweetFooter from '../organisms/TweetFooter'
 
 type Props = {
     AllTweet: {

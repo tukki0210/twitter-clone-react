@@ -2,6 +2,7 @@
   "name": "twitter",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3005",
   "dependencies": {
     "@craco/craco": "^6.2.0",
     "@material-ui/core": "^4.12.3",
@@ -13,10 +14,11 @@
     "@types/node": "^16.4.10",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "axios": "^0.21.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.12.2",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^4.0.3",
     "typescript": "^4.1.2",
     "web-vitals": "^2.1.0"
   },

@@ -1,42 +1,36 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { FC, useState } from 'react'
+import { FC } from 'react'
+import axios from 'axios'
 import { useForm } from 'react-hook-form'
 
-type TweetType = {
-    tweetId: number;
-    tweetUser: {
-        userName: string;
-        userId: string;
-    };
-    tweetBody: string;
-}
 
 type Props = {
-    AllTweet: TweetType[]
-    setAllTweet: React.Dispatch<React.SetStateAction<TweetType[]>>
+    formCount: number,
+    setFormCount: React.Dispatch<React.SetStateAction<number>>
 }
 
 type FormData = {
     tweet: string;
 }
 
-const TweetForm: FC<Props> = ({ AllTweet, setAllTweet }) => {
-
-    const [id, setId] = useState(2);
+// const TweetForm: FC<Props> = ({ AllTweet, setAllTweet }) => {
+const TweetForm: FC<Props> = ({ formCount, setFormCount }) => {
 
     const { register, handleSubmit } = useForm<FormData>();
-    // const {ref, onChange, onBlur, name} = register('tweet')
+
     const onSubmit = ({ tweet }: FormData) => {
-        const TweetData: TweetType = {
-            tweetId: id,
+
+        axios.post('/api', {
             tweetUser: {
                 userName: 'tsukuda',
                 userId: '1111'
             },
             tweetBody: tweet
-        }
-        setAllTweet([...AllTweet, TweetData])
-        setId(id+1)
+        })
+            .then(response => console.log(response))
+            .catch(error => console.log(error))
+
+        setFormCount(formCount + 1)
     }
 
     return (
@@ -44,8 +38,6 @@ const TweetForm: FC<Props> = ({ AllTweet, setAllTweet }) => {
             <form onSubmit={handleSubmit(onSubmit)} >
                 <textarea
                     {...register("tweet")}
-                    // name="tweet"
-                    // onChange={name}
                     placeholder="いまどうしてる？"
                     rows={4}
                     cols={100}

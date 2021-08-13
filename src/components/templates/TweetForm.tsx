@@ -3,18 +3,11 @@ import { FC } from 'react'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
 
-
-type Props = {
-    formCount: number,
-    setFormCount: React.Dispatch<React.SetStateAction<number>>
-}
-
 type FormData = {
     tweet: string;
 }
 
-// const TweetForm: FC<Props> = ({ AllTweet, setAllTweet }) => {
-const TweetForm: FC<Props> = ({ formCount, setFormCount }) => {
+const TweetForm: FC = () => {
 
     const { register, handleSubmit } = useForm<FormData>();
 
@@ -29,8 +22,6 @@ const TweetForm: FC<Props> = ({ formCount, setFormCount }) => {
         })
             .then(response => console.log(response))
             .catch(error => console.log(error))
-
-        setFormCount(formCount + 1)
     }
 
     return (

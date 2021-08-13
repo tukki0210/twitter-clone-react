@@ -15,24 +15,19 @@ type TweetType = {
     tweetBody: string;
 }
 
+const useSSE = () => {
 
-const firstTweet: TweetType =
-{
-    tweetId: 1,
-    tweetUser: {
-        userName: "tsukuda",
-        userId: "1111"
-    },
-    tweetBody: "フロント側の最初のツイート"
-}
-
-const TopPage: FC = () => {
+    const firstTweet: TweetType =
+    {
+        tweetId: 1,
+        tweetUser: {
+            userName: "tsukuda",
+            userId: "1111"
+        },
+        tweetBody: "フロント側の最初のツイート"
+    }
 
     const [tweet, setTweet] = useState<TweetType>(firstTweet);
-
-    const [allTweet, setAllTweet] = useState<TweetType[]>([]);
-
-    const [formCount, setFormCount] = useState<number>(0)
 
     useEffect(() => {
         // SSEによるサーバからの受信
@@ -46,12 +41,26 @@ const TopPage: FC = () => {
         return () => eventSource.close()
     }, [])
 
+    return tweet
+}
+
+const useAllTweet = (tweet: TweetType) => {
     // SSEによってtweetの値に変更があれば、allTweetを更新
+    const [allTweet, setAllTweet] = useState<TweetType[]>([]);
 
     useEffect(() => {
         setAllTweet([...allTweet, tweet])
         console.log(tweet)
     }, [tweet])
+
+    return allTweet
+}
+
+const TopPage: FC = () => {
+
+    const newTweet = useSSE()
+
+    const allTweet = useAllTweet(newTweet)
 
     return (
         <div className="flex justify-between">
@@ -60,7 +69,7 @@ const TopPage: FC = () => {
             </aside>
             <main className="m-4">
                 {/* <TweetForm AllTweet={AllTweet} setAllTweet={setAllTweet} /> */}
-                <TweetForm formCount={formCount} setFormCount={setFormCount} />
+                <TweetForm />
                 <div className="mt-4 w-2/3 border-gray-200 border-2">
                     <UserTweet AllTweet={allTweet} />
                 </div>

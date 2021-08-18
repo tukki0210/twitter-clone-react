@@ -5,6 +5,7 @@ import { FC, useState, useEffect } from 'react';
 import MenuBar from '../organisms/MenuBar';
 import TweetForm from '../templates/TweetForm';
 import UserTweet from '../templates/UserTweet'
+import Login from '../templates/LoginForm'
 
 type TweetType = {
     tweetId: number;
@@ -56,20 +57,45 @@ const useAllTweet = (tweet: TweetType) => {
     return allTweet
 }
 
+const firstUser = {
+    userName: 'tsukuda',
+    userId: '1111'
+}
+
+// const secondUser = {
+//     userName: 'tukki',
+//     userId: '2222'
+// }
+
+// const useUserTweet = () => {
+//     const [user, setUser] = useState(firstUser)
+
+//     useEffect(() => {
+//         setUser(secondUser)
+//     }, [])
+
+//     return user
+// }
+
+
 const TopPage: FC = () => {
 
     const newTweet = useSSE()
 
     const allTweet = useAllTweet(newTweet)
 
+    // const user = useUserTweet()
+
+    const [user, setUser] = useState(firstUser)
+
     return (
         <div className="flex justify-between">
             <aside className="w-1/5 m-4 border-r-2 border-gray-100">
                 <MenuBar />
+                <Login setUser={setUser} />
             </aside>
             <main className="m-4">
-                {/* <TweetForm AllTweet={AllTweet} setAllTweet={setAllTweet} /> */}
-                <TweetForm />
+                <TweetForm user={user} />
                 <div className="mt-4 w-2/3 border-gray-200 border-2">
                     <UserTweet AllTweet={allTweet} />
                 </div>

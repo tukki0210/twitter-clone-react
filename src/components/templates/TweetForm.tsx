@@ -7,17 +7,27 @@ type FormData = {
     tweet: string;
 }
 
-const TweetForm: FC = () => {
+type Props = {
+    user: {
+        userName: string;
+        userId: string;
+    };
+}
+
+// const tweetUser = {
+//     userName: 'tsukuda',
+//     userId: Math.floor(Math.random() * 10)
+// }
+
+
+const TweetForm: FC<Props> = ({ user }) => {
 
     const { register, handleSubmit } = useForm<FormData>();
 
     const onSubmit = ({ tweet }: FormData) => {
 
         axios.post('/api', {
-            tweetUser: {
-                userName: 'tsukuda',
-                userId: '1111'
-            },
+            tweetUser: user,
             tweetBody: tweet
         })
             .then(response => console.log(response))

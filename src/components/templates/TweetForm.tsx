@@ -14,24 +14,21 @@ type Props = {
     };
 }
 
-// const tweetUser = {
-//     userName: 'tsukuda',
-//     userId: Math.floor(Math.random() * 10)
-// }
-
 
 const TweetForm: FC<Props> = ({ user }) => {
 
     const { register, handleSubmit } = useForm<FormData>();
 
-    const onSubmit = ({ tweet }: FormData) => {
-
-        axios.post('/api', {
-            tweetUser: user,
-            tweetBody: tweet
-        })
-            .then(response => console.log(response))
-            .catch(error => console.log(error))
+    const onSubmit = async ({ tweet }: FormData) => {
+        try {
+            const response = await axios.post('/api/tweet', {
+                tweetUser: user,
+                tweetBody: tweet
+            })
+            console.log(response)
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (

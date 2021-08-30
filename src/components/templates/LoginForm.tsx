@@ -1,4 +1,5 @@
 import React, { FC, useReducer, useEffect } from "react";
+import axios from 'axios';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
 import { TextField, Card, CardContent, CardActions, CardHeader, Button } from "@material-ui/core";
@@ -98,6 +99,7 @@ type Props = {
         userId: string;
     }>>
 }
+
 const Login: FC<Props> = ({ setUser }) => {
     const classes = useStyles();
     const [state, dispatch] = useReducer(reducer, initialState);
@@ -117,12 +119,24 @@ const Login: FC<Props> = ({ setUser }) => {
         }
     }, [state.username, state.password])
 
-    const handleLogin = () => {
-        if (state.username === 'abc@mail.com' && state.password === 'password') {
+
+    // Loginボタンを押した時の挙動
+    const handleLogin = async () => {
+
+        // axiosは戻り値がpromise
+        const res  = await axios.post('/api/user', {
+            loginUser: state.username,
+            loginPass: state.password
+        })
+        
+        /* eslint-disable */
+        const userId: string = res.data.userId
+   
+        if (res.status === (201)) {
 
             const secondUser = {
                 userName: state.username,
-                userId: '2222'
+                userId
             }
             /* eslint-disable */
             setUser(secondUser)
@@ -137,7 +151,8 @@ const Login: FC<Props> = ({ setUser }) => {
                 payload: 'Incorrect username or password'
             });
         }
-    };
+    }
+
 
     const handleKeyPress = (event: React.KeyboardEvent) => {
         if (event.key === 'Enter') {

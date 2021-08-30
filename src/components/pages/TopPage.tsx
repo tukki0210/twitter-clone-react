@@ -1,26 +1,30 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { FC, useState, useEffect } from 'react';
+import axios from 'axios';
 
 import MenuBar from '../organisms/MenuBar';
 import TweetForm from '../templates/TweetForm';
 import UserTweet from '../templates/UserTweet'
 import Login from '../templates/LoginForm'
 
+type UserType = {
+    userName: string;
+    readonly userId: string;
+}
+
 type TweetType = {
-    tweetId: number;
-    tweetUser: {
-        userName: string;
-        userId: string;
-    };
+    readonly tweetId: string;
+    tweetUser: UserType;
     tweetBody: string;
 }
+
 
 const useSSE = () => {
 
     const firstTweet: TweetType =
     {
-        tweetId: 1,
+        tweetId: '1111',
         tweetUser: {
             userName: "tsukuda",
             userId: "1111"
@@ -33,7 +37,7 @@ const useSSE = () => {
     useEffect(() => {
         // SSEによるサーバからの受信
         // ロード時にSSEを待ち受ける
-        const eventSource = new EventSource('/api')
+        const eventSource = new EventSource('/api/tweet')
         eventSource.addEventListener('message', e => {
             setTweet(JSON.parse(e.data))
         })
@@ -46,9 +50,28 @@ const useSSE = () => {
 }
 
 const useAllTweet = (tweet: TweetType) => {
-    // SSEによってtweetの値に変更があれば、allTweetを更新
+
     const [allTweet, setAllTweet] = useState<TweetType[]>([]);
 
+    // タイムラインのツイートを初回レンダリング時に取得する
+    useEffect(() => {
+        const loadAllTweet = async (): Promise<void> => {
+            try {
+                const response = await axios.get('/api/tweet/all')
+                /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+                if (response.data.allTweet.length > 1) {
+                    setAllTweet([tweet, ...response.data.allTweet])
+                    console.log(allTweet)
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        void loadAllTweet()
+    }, [])
+
+    // SSEによってtweetの値に変更があれば、allTweetを更新
     useEffect(() => {
         setAllTweet([...allTweet, tweet])
         console.log(tweet)
@@ -56,27 +79,10 @@ const useAllTweet = (tweet: TweetType) => {
 
     return allTweet
 }
-
-const firstUser = {
+const firstUser: UserType = {
     userName: 'tsukuda',
     userId: '1111'
 }
-
-// const secondUser = {
-//     userName: 'tukki',
-//     userId: '2222'
-// }
-
-// const useUserTweet = () => {
-//     const [user, setUser] = useState(firstUser)
-
-//     useEffect(() => {
-//         setUser(secondUser)
-//     }, [])
-
-//     return user
-// }
-
 
 const TopPage: FC = () => {
 
@@ -84,9 +90,7 @@ const TopPage: FC = () => {
 
     const allTweet = useAllTweet(newTweet)
 
-    // const user = useUserTweet()
-
-    const [user, setUser] = useState(firstUser)
+    const [user, setUser] = useState<UserType>(firstUser)
 
     return (
         <div className="flex justify-between">
